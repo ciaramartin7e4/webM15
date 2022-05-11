@@ -1,0 +1,173 @@
+<!-- <div>Teachable Machine Pose Model</div> -->
+<!--<button type="button" onclick="init()">Start</button>-->
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
+
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "https://teachablemachine.withgoogle.com/models/JP-KOHFdP/";
+    let model, webcam, ctx, labelContainer, maxPredictions;
+
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
+
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // Note: the pose library adds a tmPose object to your window (window.tmPose)
+        model = await tmPose.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+
+        // Convenience function to setup a webcam
+        const size = 500;
+        const flip = true; // whether to flip the webcam
+        webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
+
+        // append/get elements to the DOM
+        const canvas = document.getElementById("canvas");
+
+        canvas.addEventListener("click", function(){
+            canvas.width = size; canvas.height = size;
+            ctx = canvas.getContext("2d");
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
+        }
+        })
+        
+    }
+
+    async function loop(timestamp) {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    async function predict() {
+        // Prediction #1: run input through posenet
+        // estimatePose can take in an image, video or canvas html element
+        const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+        // Prediction 2: run input through teachable machine classification model
+        const prediction = await model.predict(posenetOutput);
+
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+
+            labelContainer.childNodes[i].innerHTML = classPrediction;
+                if (prediction[i].probability.toFixed(2) >= 1 ){
+                window.alert(prediction[i].className)
+                // console.log(prediction[i].className)
+            
+            }
+        }
+
+        
+        // finally draw the poses
+        drawPose(pose);
+    }
+
+    function drawPose(pose) {
+        if (webcam.canvas) {
+            ctx.drawImage(webcam.canvas, 0, 0);
+            // draw the keypoints and skeleton
+            if (pose) {
+                const minPartConfidence = 0.5;
+                tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+            }
+        }
+    }
+</script>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    <title>Exàmen Pràctic</title>
+
+    <link href="css/estilos.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+</head>
+
+<body>
+    <nav>
+    	<ul>
+    		<li><a href="#">Inici</a></li>
+    		<li><a href="#">Productes</a></li>
+    		<li><a href="#">Sobre Noslatres</a></li>
+    		<li><a href="#">contactar</a></li>
+    	</ul>
+    </nav>
+
+    <section class="container">
+        <header> 
+           <img src="img/4294.jpg" />
+           <aside>
+                <h3>Detecta tu deporte</h3>
+                <h3><a type="button" href="#"  onclick="init()" >Entra-hi</a></h3>
+            </aside>
+        </header>
+        <main>
+            <!-- <h1>Els millors viatges - La millor experiència</h1>
+            <figure class="card">
+                 <img src="img/viaje_india.jpg" />
+                 <figcaption>Viatges a mida</figcaption>
+            </figure>
+             <figure class="card">
+                 <img src="img/img_crucero.jpg" />
+                 <figcaption>Viatges en creuer</figcaption>
+            </figure> 
+            <figure class="card">
+                 <img src="img/img_grupo.jpg" />
+                 <figcaption>Viatges en grup</figcaption>
+            </figure> -->
+        </main>
+
+        <!-- <section class="texto "> -->
+            
+            <!-- <div>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Placeat facere, vero neque sunt nobis hic
+                excepturi tempore. Corporis repellendus voluptatibus possimus deleniti numquam, enim, sunt porro odit
+                libero animi ratione.
+            </div>
+            <div>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Placeat facere, vero neque sunt nobis hic
+                excepturi tempore. Corporis repellendus voluptatibus possimus deleniti numquam, enim, sunt porro odit
+                libero animi ratione.
+            </div>
+            <div>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Placeat facere, vero neque sunt nobis hic
+                excepturi tempore. Corporis repellendus voluptatibus possimus deleniti numquam, enim, sunt porro odit
+                libero animi ratione.
+            </div> -->
+            <div><canvas id="canvas"></canvas></div>
+            <div class="texto" id="label-container"></div>
+        <!-- </section> -->
+    </section>
+    <footer>
+        <address>
+            <p>Carrer Aiguablava 121</p>
+            <p>08033 Barcelona</p>
+            <p>+34937070020 </p>
+        </address>
+        <div>
+            <p>Copyright 2021 Tots els drets reservats</p>
+            <img src="img/logo_itb.png">
+        </div>
+        <section class="social">
+            <img src="img/facebook.jpg">
+            <img src="img/twitter.jpg">
+            <img src="img/snapchat.jpg">
+        </section>
+    </footer>
+</body>
+
+</html>
