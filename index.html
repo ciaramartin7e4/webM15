@@ -27,16 +27,16 @@
         window.requestAnimationFrame(loop);
 
         // append/get elements to the DOM
-        const canvas = document.getElementById("canvas");
-
-        canvas.addEventListener("click", function(){
+        // const canvas = document.getElementById("canvas");
+        //
+        // canvas.addEventListener("click", function(){
             canvas.width = size; canvas.height = size;
             ctx = canvas.getContext("2d");
             labelContainer = document.getElementById("label-container");
             for (let i = 0; i < maxPredictions; i++) { // and class labels
             labelContainer.appendChild(document.createElement("div"));
         }
-        })
+        // })
         
     }
 
@@ -56,7 +56,7 @@
         for (let i = 0; i < maxPredictions; i++) {
             const classPrediction = prediction[i].className + ": " + prediction[i].probability.toFixed(2);
 
-            labelContainer.childNodes[i].innerHTML = classPrediction;
+            // labelContainer.childNodes[i].innerHTML = classPrediction;
                 if (prediction[i].probability.toFixed(2) >= 1 ){
                 window.alert(prediction[i].className)
                 // console.log(prediction[i].className)
@@ -100,35 +100,43 @@
 <body>
     <nav>
     	<ul>
-    		<li><a href="#">Inici</a></li>
-    		<li><a href="#">Productes</a></li>
-    		<li><a href="#">Sobre Noslatres</a></li>
-    		<li><a href="#">contactar</a></li>
+    		<li><a href="#">Inicio</a></li>
+    		<li><a href="#">Deportes</a></li>
+    		<li><a href="#">Sobre Nosotros</a></li>
+    		<li><a href="#">Contactar</a></li>
     	</ul>
     </nav>
 
-    <section class="container">
+    <div class="container">
         <header> 
-           <img src="img/4294.jpg" />
+           <img width="1200px"  height="800px" src="img/deporte.png" />
            <aside>
                 <h3>Detecta tu deporte</h3>
-                <h3><a type="button" href="#"  onclick="init()" >Entra-hi</a></h3>
+                <h3><a type="button" href="#"  onclick="init()" >DETECTAR</a></h3>
             </aside>
         </header>
-        <main>
-            <!-- <h1>Els millors viatges - La millor experiència</h1>
+        <main >
+            <h1>Els millors esports - La millor classificació</h1>
+            <div class="main">
             <figure class="card">
-                 <img src="img/viaje_india.jpg" />
-                 <figcaption>Viatges a mida</figcaption>
+                <div class="imagenesYTexto">
+                 <img src="img/Deportes-individuales.png" />
+                 <figcaption>Deportes Individual</figcaption>
+                </div>
             </figure>
              <figure class="card">
-                 <img src="img/img_crucero.jpg" />
-                 <figcaption>Viatges en creuer</figcaption>
-            </figure> 
+                 <div class="imagenesYTexto">
+                 <img src="img/Deportes-equipo.png" />
+                 <figcaption>Deportes de equipo</figcaption>
+                 </div>
+            </figure>
             <figure class="card">
-                 <img src="img/img_grupo.jpg" />
-                 <figcaption>Viatges en grup</figcaption>
-            </figure> -->
+                <div class="imagenesYTexto">
+                 <img src="img/deporte-riesgo.png" />
+                 <figcaption>Deportes de riesgo</figcaption>
+                </div>
+            </figure>
+            </div>
         </main>
 
         <!-- <section class="texto "> -->
@@ -148,10 +156,10 @@
                 excepturi tempore. Corporis repellendus voluptatibus possimus deleniti numquam, enim, sunt porro odit
                 libero animi ratione.
             </div> -->
-            <div><canvas id="canvas"></canvas></div>
+            <div class="canvas"><canvas id="canvas" class="camara" ></canvas></div>
             <div class="texto" id="label-container"></div>
         <!-- </section> -->
-    </section>
+    </div>
     <footer>
         <address>
             <p>Carrer Aiguablava 121</p>

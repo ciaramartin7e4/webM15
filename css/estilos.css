@@ -19,7 +19,7 @@ body
 /* Establecemos el centrado y las dimensiones de los elementos principales */
 
 nav,.container,footer {
-  max-width: 1200px;
+  max-width: 100%;
   min-width: 576px;
   margin:0px auto;
 }
@@ -110,11 +110,12 @@ aside h3 {
 /* Elemento principal con las 3 cards */
 main {
   margin: 0px auto;
-  width: 90%;
+  width: 100%;
 }
 
 main h1{
   text-align: center;
+  background-color: #f3dfe3;
 }
 
 figure.card {
@@ -136,7 +137,7 @@ width: 25%
   float: left;
   margin: 15px auto;
   overflow-y: auto;
-  width: 90%;
+  width: 100%;
 }
 
 
@@ -200,4 +201,29 @@ footer section {
 
 footer img {
   width: 12%;
+}
+
+.main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+figcaption{
+  font-size: x-large;
+  margin-top: 15px;
+}
+
+.imagenesYTexto{
+  display: flex;
+  flex-direction: column;
+}
+.canvas{
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.camara{
+  border: solid 4px #f3dfe3;
 }
